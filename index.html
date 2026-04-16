@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 K-패스 & 모두의 카드 완전 정리</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1F3A;
+    --blue: #1565C0;
+    --blue-light: #1E88E5;
+    --sky: #E3F2FD;
+    --green: #2E7D32;
+    --green-light: #E8F5E9;
+    --amber: #E65100;
+    --amber-light: #FFF3E0;
+    --purple: #4527A0;
+    --purple-light: #EDE7F6;
+    --red: #B71C1C;
+    --red-light: #FFEBEE;
+    --gray: #F5F5F5;
+    --text: #1A1A2E;
+    --muted: #546E7A;
+    --white: #FFFFFF;
+    --border: #E0E0E0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #F0F4F8;
+    color: var(--text);
+    min-height: 100vh;
+  }
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 40px 40px 32px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: rgba(30,136,229,0.15);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(69,39,160,0.2);
+  }
+  .header-tag {
+    display: inline-block;
+    background: rgba(30,136,229,0.3);
+    color: #90CAF9;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .header h1 span { color: #90CAF9; }
+  .header p {
+    color: #B0BEC5;
+    font-size: 14px;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+  }
+  .header-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 28px;
+    position: relative;
+    z-index: 1;
+  }
+  .hstat {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+  .hstat .n { font-size: 22px; font-weight: 900; color: #90CAF9; font-family: 'DM Mono', monospace; }
+  .hstat .l { font-size: 11px; color: #78909C; margin-top: 3px; }
+
+  /* SECTION */
+  .section { margin-bottom: 16px; }
+  .sec-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .sec-label .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .sec-label span {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px 28px;
+    border: 1px solid var(--border);
+  }
+  .card-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  /* COMPARISON */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .compare-card {
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .compare-card.old { background: #F5F5F5; border: 1.5px solid #E0E0E0; }
+  .compare-card.new { background: var(--sky); border: 1.5px solid #90CAF9; }
+  .compare-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .compare-head .pill {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .compare-head .pill.old-pill { background: #E0E0E0; color: #546E7A; }
+  .compare-head .pill.new-pill { background: var(--blue); color: white; }
+  .compare-head .title { font-size: 15px; font-weight: 700; }
+  .compare-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #37474F;
+  }
+  .compare-item .ico { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* KEY DIFFERENCE */
+  .key-diff {
+    background: linear-gradient(135deg, #E3F2FD 0%, #EDE7F6 100%);
+    border: 1.5px solid #90CAF9;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .key-diff .icon-box {
+    width: 44px; height: 44px;
+    background: var(--blue);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .key-diff .text strong { font-size: 14px; font-weight: 700; color: var(--blue); display: block; margin-bottom: 4px; }
+  .key-diff .text p { font-size: 13px; color: #37474F; line-height: 1.5; }
+
+  /* 15회 SECTION */
+  .rule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .rule-card {
+    border-radius: 14px;
+    padding: 18px 20px;
+    border: 1.5px solid;
+  }
+  .rule-card.required { background: var(--amber-light); border-color: #FFCC80; }
+  .rule-card.not-required { background: var(--green-light); border-color: #A5D6A7; }
+  .rule-card .rule-head { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+  .rule-card .rule-head.req { color: var(--amber); }
+  .rule-card .rule-head.ok { color: var(--green); }
+  .rule-body { font-size: 13px; color: #455A64; line-height: 1.6; }
+
+  .auto-badge {
+    background: var(--green);
+    color: white;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: center;
+  }
+  .auto-badge strong { display: block; font-size: 15px; margin-bottom: 4px; }
+
+  /* CALCULATION */
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .calc-box {
+    background: var(--gray);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .calc-box .calc-n { font-size: 24px; font-weight: 900; color: var(--blue); font-family: 'DM Mono', monospace; }
+  .calc-box .calc-l { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+  .calc-timeline {
+    background: var(--sky);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+  }
+  .timeline-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .timeline-row:last-child { margin-bottom: 0; }
+  .t-days {
+    min-width: 70px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blue);
+    font-family: 'DM Mono', monospace;
+  }
+  .t-bar-wrap { flex: 1; position: relative; }
+  .t-bar {
+    height: 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+  }
+  .t-bar.below { background: #90A4AE; }
+  .t-bar.at { background: #42A5F5; }
+  .t-bar.over { background: var(--green); }
+  .t-label { font-size: 12px; color: var(--muted); min-width: 100px; text-align: right; }
+
+  .highlight-calc {
+    background: var(--purple-light);
+    border: 1.5px solid #B39DDB;
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .highlight-calc .big-num { font-size: 32px; font-weight: 900; color: var(--purple); font-family: 'DM Mono', monospace; line-height: 1; }
+  .highlight-calc .big-sub { font-size: 11px; color: var(--purple); font-weight: 600; margin-top: 2px; }
+  .highlight-calc .desc { font-size: 13px; color: #4527A0; line-height: 1.6; }
+  .highlight-calc .desc strong { font-size: 15px; display: block; margin-bottom: 4px; }
+
+  /* REFUND TABLE */
+  .refund-table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: var(--navy);
+    color: white;
+    padding: 10px 12px;
+    font-weight: 600;
+    text-align: center;
+    font-size: 12px;
+  }
+  thead th:first-child { border-radius: 8px 0 0 0; text-align: left; }
+  thead th:last-child { border-radius: 0 8px 0 0; }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid #F0F0F0; text-align: center; }
+  tbody td:first-child { text-align: left; font-weight: 500; }
+  tbody tr:hover { background: #FAFAFA; }
+  tbody tr.highlight td { background: #EDE7F6; }
+  .rate-num { font-weight: 700; color: var(--blue); font-family: 'DM Mono', monospace; }
+  .new-tag { background: var(--blue); color: white; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 4px; }
+
+  /* REGION TABLE */
+  .region-highlight {
+    background: var(--purple-light);
+    border: 2px solid var(--purple);
+    border-radius: 8px;
+  }
+  .region-highlight td { background: transparent !important; color: #4527A0; font-weight: 600; }
+
+  /* HOW TO */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .step-box { background: var(--gray); border-radius: 12px; padding: 16px; text-align: center; }
+  .step-box .snum {
+    width: 28px; height: 28px;
+    background: var(--blue);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .step-box .stitle { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .step-box .sdesc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  .warn-strip {
+    background: var(--amber-light);
+    border-left: 4px solid var(--amber);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #BF360C;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  .ok-strip {
+    background: var(--green-light);
+    border-left: 4px solid var(--green);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #1B5E20;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  /* JECHEON */
+  .jecheon-header {
+    background: var(--purple);
+    color: white;
+    border-radius: 14px 14px 0 0;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .jecheon-header .jtag { background: rgba(255,255,255,0.2); color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+  .jecheon-header h3 { font-size: 17px; font-weight: 700; }
+  .jecheon-body {
+    background: var(--purple-light);
+    border: 1.5px solid #B39DDB;
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    padding: 20px 24px;
+  }
+  .jcheon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .jbox { background: white; border-radius: 10px; padding: 14px 16px; }
+  .jbox .jlabel { font-size: 11px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .jbox .jval { font-size: 14px; font-weight: 700; color: var(--text); }
+  .jbox .jsub { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding-top: 28px;
+    font-size: 11px;
+    color: #90A4AE;
+    line-height: 1.7;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .header-stats { grid-template-columns: repeat(2, 1fr); }
+    .compare-grid, .rule-grid, .calc-grid, .steps, .jcheon-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 24px; }
+    .page { padding: 16px 14px 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-tag">2026 대중교통비 환급 완전 정리</div>
+    <h1>K-패스 &amp; <span>모두의 카드</span></h1>
+    <p>대도시권광역교통위원회(대광위) 주관 · 전국 229개 시·군·구 참여<br>
+    알뜰교통카드(2023) → K-패스(2024.5) → 모두의 카드 추가 도입(2026.1)</p>
+    <div class="header-stats">
+      <div class="hstat"><div class="n">5,580억</div><div class="l">2026 국비 예산</div></div>
+      <div class="hstat"><div class="n">229개</div><div class="l">참여 시·군·구</div></div>
+      <div class="hstat"><div class="n">426만명</div><div class="l">2025 이용자</div></div>
+      <div class="hstat"><div class="n">27개</div><div class="l">제휴 카드사</div></div>
+    </div>
+  </div>
+
+  <!-- VS SECTION -->
+  <div class="section">
+    <div class="sec-label"><div class="dot" style="background:var(--blue)"></div><span>핵심 변화</span></div>
+    <div class="card">
+      <div class="card-title">기존 K-패스 vs 모두의 카드 — 뭐가 달라졌나?</div>
+      <div class="compare-grid">
+        <div class="compare-card old">
+          <div class="compare-head">
+            <span class="pill old-pill">기존</span>
+            <span class="title">K-패스 (정률형)</span>
+          </div>
+          <div class="compare-item"><span class="ico">📌</span>월 15회 이상 이용 필수</div>
+          <div class="compare-item"><span class="ico">📌</span>교통비의 일정 비율(20~53%) 환급</div>
+          <div class="compare-item"><span class="ico">📌</span>월 60회 상한 제한 있었음 → 2026 폐지</div>
+          <div class="compare-item"><span class="ico">📌</span>많이 타도 본인 부담 계속 증가</div>
+        </div>
+        <div class="compare-card new">
+          <div class="compare-head">
+            <span class="pill new-pill">2026 신설</span>
+            <span class="title">모두의 카드 (정액형)</span>
+          </div>
+          <div class="compare-item"><span class="ico">✅</span><strong>이용 횟수 조건 없음</strong></div>
+          <div class="compare-item"><span class="ico">✅</span>월 기준금액 초과분 <strong>100% 전액 환급</strong></div>
+          <div class="compare-item"><span class="ico">✅</span>일반형·플러스형 시스템이 자동 선택</div>
+          <div class="compare-item"><span class="ico">✅</span>많이 탈수록 환급액 무제한 증가</div>
+        </div>
+      </div>
+      <div class="key-diff">
+        <div class="icon-box">🤖</div>
+        <div class="text">
+          <strong>자동 최적 환급 — 별도 선택 필요 없음</strong>
+          <p>매월 시스템이 기존 K-패스 정률 환급과 모두의 카드 정액 환급을 모두 계산해서, 더 유리한 방식으로 자동 적용합니다. 이용자는 신경 쓸 필요가 없어요.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15회 SECTION -->
+  <div class="section">
+    <div class="sec-label"><div class="dot" style="background:var(--amber)"></div><span>자주 묻는 질문</span></div>
+    <div class="card">
+      <div class="card-title">Q. "모두의 카드도 월 15회 이상 이용해야 하나요?"</div>
+      <div class="rule-grid">
+        <div class="rule-card required">
+          <div class="rule-head req">⚠ 기존 K-패스 정률 환급</div>
+          <div class="rule-body">
+            월 <strong>15회 이상 이용 조건 여전히 존재</strong><br>
+            15회 미만이면 정률 환급(20~53%) 미적용<br>
+            (단, 가입 첫 달은 이용 횟수만큼 환급)
+          </div>
+        </div>
+        <div class="rule-card not-required">
+          <div class="rule-head ok">✅ 모두의 카드 정액 환급</div>
+          <div class="rule-body">
+            <strong>횟수 조건 없음</strong><br>
+            몇 번을 타든 월 기준금액만 넘기면<br>
+            초과분 100% 전액 환급
+          </div>
+        </div>
+      </div>
+      <div class="auto-badge">
+        <strong>결론: 시스템이 알아서 유리한 쪽 자동 적용</strong>
+        15회 미만이어도 모두의 카드 기준금액을 넘었다면 초과분 환급 가능 · 15회 이상이어도 정률이 더 유리하면 정률 환급 적용
+      </div>
+    </div>
+  </div>
+
+  <!-- CALCULATION -->
+  <div class="section">
+    <div class="sec-label"><div class="dot" style="background:var(--green)"></div><span>실제 계산 예시</span></div>
+    <div class="card">
+      <div class="card-title">시내버스 1,650원 기준 · 제천시 일반 국민 (기준금액 5만원)</div>
+      <div class="calc-grid">
+        <div class="calc-box">
+          <div class="calc-n">5만원</div>
+          <div class="calc-l">제천시 (우대지원지역)<br>일반 국민 기준금액</div>
+        </div>
+        <div class="calc-box">
+          <div class="calc-n">30.3회</div>
+          <div class="calc-l">5만원 ÷ 1,650원<br>= 초과 시작 탑승 기준</div>
+        </div>
+        <div class="calc-box">
+          <div class="calc-n">편도 31회</div>
+          <div class="calc-l">이 시점부터 초과분<br>100% 환급 시작</div>
+        </div>
+      </div>
+
+      <div class="calc-timeline">
+        <div class="timeline-row">
+          <div class="t-days">왕복 14일</div>
+          <div class="t-bar-wrap"><div class="t-bar below" style="width:70%">28회 · 46,200원</div></div>
+          <div class="t-label" style="color:#90A4AE">기준금액 미달</div>
+        </div>
+        <div class="timeline-row">
+          <div class="t-days">왕복 15일</div>
+          <div class="t-bar-wrap"><div class="t-bar at" style="width:80%">30회 · 49,500원</div></div>
+          <div class="t-label" style="color:#42A5F5">아직 미달 (500원 부족)</div>
+        </div>
+        <div class="timeline-row">
+          <div class="t-days">왕복 16일</div>
+          <div class="t-bar-wrap"><div class="t-bar over" style="width:90%">32회 · 52,800원</div></div>
+          <div class="t-label" style="color:var(--green)">초과! 2,800원 환급</div>
+        </div>
+      </div>
+
+      <div class="highlight-calc">
+        <div>
+          <div class="big-num">16일</div>
+          <div class="big-sub">왕복 출퇴근 기준</div>
+        </div>
+        <div class="desc">
+          <strong>왕복 16일(편도 32회)부터 초과분 환급 시작</strong>
+          월 22일 출퇴근 시 → 36,300원 초과 → <strong style="color:var(--purple)">36,300원 전액 환급</strong><br>
+          월 22일 기준 총 교통비 72,600원 중 실부담 50,000원만 내는 효과
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFUND RATES -->
+  <div class="section">
+    <div class="sec-label"><div class="dot" style="background:var(--purple)"></div><span>2026 환급 구조</span></div>
+    <div class="card">
+      <div class="card-title">유형별 K-패스 기본 환급률</div>
+      <div class="refund-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>유형</th>
+              <th>기본 환급률</th>
+              <th>모두의 카드 기준금액 (제천시)</th>
+              <th>비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>일반</td>
+              <td><span class="rate-num">20%</span></td>
+              <td>5만원 (일반형) / 9만원 (플러스형)</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>청년 (만 19~34세)</td>
+              <td><span class="rate-num">30%</span></td>
+              <td>4.5만 / 8만원</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>2자녀 가구</td>
+              <td><span class="rate-num">30%</span></td>
+              <td>4.5만 / 8만원</td>
+              <td></td>
+            </tr>
+            <tr class="highlight">
+              <td>어르신 (65세 이상)</td>
+              <td><span class="rate-num">30%</span></td>
+              <td>4.5만 / 8만원</td>
+              <td><span class="new-tag">2026 신설</span></td>
+            </tr>
+            <tr>
+              <td>3자녀 이상</td>
+              <td><span class="rate-num">50%</span></td>
+              <td>3.5만 / 7만원</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>저소득층</td>
+              <td><span class="rate-num">53.3%</span></td>
+              <td>3.5만 / 7만원</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ok-strip">
+        ✔ 청소년(13~18세) 유형: 사회보장제도 변경절차 등을 거쳐 <strong>2026년 6월 시행</strong> 예정<br>
+        ✔ 일반형: 1회 총요금 3,000원 미만 교통수단 · 플러스형: GTX·광역버스·신분당선 등 고요금 수단 포함
+      </div>
+    </div>
+  </div>
+
+  <!-- JECHEON -->
+  <div class="section">
+    <div class="sec-label"><div class="dot" style="background:var(--purple)"></div><span>제천시</span></div>
+    <div>
+      <div class="jecheon-header">
+        <span class="jtag">우대지원지역</span>
+        <h3>제천시 관련 정보</h3>
+      </div>
+      <div class="jecheon-body">
+        <div class="jcheon-grid">
+          <div class="jbox">
+            <div class="jlabel">지역 구분</div>
+            <div class="jval">우대지원지역</div>
+            <div class="jsub">수도권·일반 지방권보다 기준금액 낮음<br>→ 지방 거주자가 더 유리한 구조</div>
+          </div>
+          <div class="jbox">
+            <div class="jlabel">2026 보조금 배분</div>
+            <div class="jval">총 342,000,000원</div>
+            <div class="jsub">국비 1억 7,100만 · 도비 5,130만 · 시비 1억 1,970만<br>충북 내 청주시 다음 두 번째 규모</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW TO -->
+  <div class="section">
+    <div class="sec-label"><div class="dot" style="background:var(--green)"></div><span>신청 방법</span></div>
+    <div class="card">
+      <div class="card-title">K-패스 카드가 없는 경우 3단계</div>
+      <div class="steps">
+        <div class="step-box">
+          <div class="snum">1</div>
+          <div class="stitle">카드 발급</div>
+          <div class="sdesc">신한·KB국민·NH농협·우리·하나·삼성·현대·BC 등 27개 제휴 카드사에서 K-패스 전용 카드 발급 (온라인/오프라인)</div>
+        </div>
+        <div class="step-box">
+          <div class="snum">2</div>
+          <div class="stitle">앱 등록</div>
+          <div class="sdesc">K-패스 앱(kpass.go.kr) 설치 → 회원가입 → 본인인증 → 카드 등록 (약 5분 소요)</div>
+        </div>
+        <div class="step-box">
+          <div class="snum">3</div>
+          <div class="stitle">약관 동의</div>
+          <div class="sdesc">'모두의 카드 서비스 동의' 체크 → 완료! 다음 달부터 자동 환급</div>
+        </div>
+      </div>
+      <div class="ok-strip">✔ 기존 K-패스 카드 있으면 재발급 불필요 — 2026년 1월 1일부터 자동 적용 (앱에서 약관 동의만 하면 됨)</div>
+      <div class="warn-strip">⚠ 카드 발급 후 반드시 K-패스 앱에 등록해야 환급 가능 · KTX·SRT·시외버스·택시 제외 · 환급은 이용 다음 달 자동 지급</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    출처: 대도시권광역교통위원회 「2026년 대중교통비 지원 및 환급사업 추진계획」 · kpass.go.kr<br>
+    본 인포그래픽은 정보 제공 목적이며, 정확한 내용은 K-패스 공식 홈페이지에서 확인하세요.<br>
+    2026. 4 기준
+  </div>
+
+</div>
+</body>
+</html>
